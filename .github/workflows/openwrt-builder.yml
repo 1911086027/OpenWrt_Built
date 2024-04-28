@@ -26,14 +26,6 @@ on:
           - lede
           - immortalwrt
           - Lienol
-      openwrt_board:
-        description: "Select device board"
-        required: false
-        default: "all"
-        type: choice
-        options:
-          - all
-          - s905d
       openwrt_kernel:
         description: "Select kernel version"
         required: false
