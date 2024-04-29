@@ -19,29 +19,13 @@ on:
       source_branch:
         description: "Select source branch"
         required: false
-        default: "lede"
+        default: "immortalwrt"
         type: choice
         options:
           - openwrt
           - lede
           - immortalwrt
           - Lienol
-      openwrt_kernel:
-        description: "Select kernel version"
-        required: false
-        default: "5.10.215"
-        type: choice
-        options:
-          - 5.4.274
-          - 5.10.215
-          - 5.15.156
-          - 6.1.87
-          - 6.6.28
-      auto_kernel:
-        description: "Auto use the latest kernel"
-        required: false
-        default: true
-        type: boolean
         
 env:
   FEEDS_CONF: feeds.conf.default
