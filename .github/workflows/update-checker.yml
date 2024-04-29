@@ -1,0 +1,82 @@
+#
+# https://github.com/P3TERX/Actions-OpenWrt
+#
+# File: .github/workflows/update-checker.yml
+# Description: Source code update checker
+#
+# Copyright (c) 2019-2024 P3TERX <https://p3terx.com>
+#
+# This is free software, licensed under the MIT License.
+# See /LICENSE for more information.
+#
+
+name: Update Checker
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_branch:
+        description: "Select source branch"
+        required: false
+        default: "immortalwrt"
+        type: choice
+        options:
+          - openwrt
+          - lede
+          - immortalwrt
+          - Lienol
+#  schedule:
+#    - cron: 3 * * * *
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get Commit Hash
+      id: getHash
+      run: |
+        if [[ "${{ inputs.source_branch }}" == *"openwrt"* ]]; then
+            REPO_URL="https://github.com/openwrt/openwrt"
+            REPO_BRANCH="openwrt-23.05"
+        elif [[ "${{ inputs.source_branch }}" == *"lede"* ]]; then
+            REPO_URL="https://github.com/coolsnowwolf/lede"
+            REPO_BRANCH="master"
+        elif [[ "${{ inputs.source_branch }}" == *"immortalwrt"* ]]; then
+            REPO_URL="https://github.com/immortalwrt/immortalwrt"
+            REPO_BRANCH="openwrt-23.05"
+
+        elif [[ "${{ inputs.source_branch }}" == *"Lienol"* ]]; then
+            REPO_URL="https://github.com/Lienol/openwrt"
+            REPO_BRANCH="23.05"
+        else
+            echo "Unknown source code repository."
+            exit 1
+        fi
+        git clone --depth 1 $REPO_URL -b $REPO_BRANCH .
+        echo "commitHash=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+
+    - name: Compare Commit Hash
+      id: cacheHash
+      uses: actions/cache@v3
+      with:
+        path: .commitHash
+        key: commitHash_${{ steps.getHash.outputs.commitHash }}
+
+    - name: Save New Commit Hash
+      if: steps.cacheHash.outputs.cache-hit != 'true'
+      run: |
+        echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash
+
+    - name: Trigger build
+      if: steps.cacheHash.outputs.cache-hit != 'true'
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        token: ${{ github.token }}
+        event-type: Source Code Update
+
+    - name: Delete workflow runs
+      uses: Mattraks/delete-workflow-runs@v2
+      with:
+        retain_days: 0
+        keep_minimum_runs: 2
