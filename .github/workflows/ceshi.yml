@@ -165,7 +165,7 @@ jobs:
         [[ -e "${CONFIGS}" ]] && cp -f ${CONFIGS} openwrt/.config
         dos2unix ${DIY_P2_SH} && chmod +x ${DIY_P2_SH}
         cd openwrt
-        ${GITHUB_WORKSPACE}${DIY_P2_SH}
+        ${GITHUB_WORKSPACE}/${DIY_P2_SH}
 
     - name: Download package
       run: |
