@@ -93,6 +93,7 @@ jobs:
 
     - name: Create simulated physical disk
       run: |
+        sudo apt install -y dos2unix
         mnt_size=$(expr $(df -h /mnt | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 1)
         root_size=$(expr $(df -h / | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 4)
         sudo truncate -s "${mnt_size}"G /mnt/mnt.img
@@ -137,8 +138,6 @@ jobs:
         git clone -q --single-branch --depth=1 --branch=${REPO_BRANCH} ${REPO_URL} openwrt
         ln -sf /builder/openwrt ${GITHUB_WORKSPACE}/openwrt
         echo "build_tag=OpenWrt_${TAGS_NAME}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
-        cd ${GITHUB_WORKSPACE}
-        ls -a
 
     - name: Cache
       uses: stupidloud/cachewrtbuild@main
@@ -148,8 +147,9 @@ jobs:
     
     - name: Load custom feeds
       run: |
+        ls -a
         [[ -f "${FEEDS_CONF}" ]] && cp -f ${FEEDS_CONF} openwrt/feeds.conf.default
-        chmod +x ${DIY_P1_SH}
+        dos2unix ${DIY_P2_SH} && chmod +x ${DIY_P1_SH}
         cd openwrt
         ${GITHUB_WORKSPACE}/${DIY_P1_SH}
 
@@ -163,7 +163,7 @@ jobs:
       run: |
         [[ -e "${FILES}" ]] && mv -f ${FILES} openwrt/files
         [[ -e "${CONFIGS}" ]] && cp -f ${CONFIGS} openwrt/.config
-        chmod +x ${DIY_P2_SH}
+        dos2unix ${DIY_P2_SH} && chmod +x ${DIY_P2_SH}
         cd openwrt
         ${GITHUB_WORKSPACE}${DIY_P2_SH}
 
