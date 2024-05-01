@@ -126,9 +126,6 @@ jobs:
         sudo rm -rf ~/{.cargo,.dotnet,.rustup}
         sudo timedatectl set-timezone "${TZ}"
 
-        sudo mkdir -p /mnt/workdir
-        sudo chown $USER:$GROUPS /mnt/workdir
-
     - name: Create simulated physical disk
       run: |
         mnt_size=$(expr $(df -h /mnt | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 1)
@@ -145,11 +142,10 @@ jobs:
         sudo mkdir -p /builder
         sudo mount /dev/github/runner /builder
         sudo chown -R runner.runner /builder
-        df -Th
   
     - name: Clone source code [ ${{ inputs.source_branch }} ]
       id: codes
-      working-directory: /mnt/workdir
+      working-directory: /builder
       run: |
         df -hT $PWD
         if [[ "${{ inputs.source_branch }}" == *"openwrt"* ]]; then
@@ -174,7 +170,7 @@ jobs:
         fi
         git clone -q --single-branch --depth=1 --branch=${REPO_BRANCH} ${REPO_URL} openwrt
 
-        ln -sf /mnt/workdir/openwrt ${GITHUB_WORKSPACE}/openwrt
+        ln -sf /builder ${GITHUB_WORKSPACE}
 
         echo "build_tag=OpenWrt_${TAGS_NAME}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
 
