@@ -107,11 +107,11 @@ jobs:
         sudo mkdir -p /builder
         sudo mount /dev/github/runner /builder
         sudo chown -R runner.runner /builder
-        ln -sf /builder ${GITHUB_WORKSPACE}
         df -hT
   
     - name: Clone source code [ ${{ inputs.source_branch }} ]
       id: codes
+      working-directory: /builder
       run: |
         df -hT $PWD
         if [[ "${{ inputs.source_branch }}" == *"openwrt"* ]]; then
@@ -135,6 +135,7 @@ jobs:
             exit 1
         fi
         git clone -q --single-branch --depth=1 --branch=${REPO_BRANCH} ${REPO_URL} openwrt
+        ln -sf /builder/openwrt ${GITHUB_WORKSPACE}/openwrt
         echo "build_tag=OpenWrt_${TAGS_NAME}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
         ls -a
 
