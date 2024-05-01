@@ -183,7 +183,6 @@ jobs:
       with:
         ccache: 'true'
         prefix: ${GITHUB_WORKSPACE}/openwrt
-      run: echo "hit=$hit" >> ${GITHUB_OUTPUT}
     
     - name: Load custom feeds
       run: |
