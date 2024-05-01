@@ -78,7 +78,7 @@ env:
   MAKE_DOCKER_SH: docker/make_docker_image.sh
   DIY_P1_SH: scripts/diy-part1.sh
   DIY_P2_SH: scripts/diy-part2.sh
-  DOCKER_OUTPATH: out
+  DOCKER_OUTPATH: docker/out
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
 
@@ -118,6 +118,7 @@ jobs:
         sudo -E apt-get -y update
         sudo -E apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
         sudo -E apt-get -y install $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
+        sudo -E apt-get -y install dos2unix
         sudo -E systemctl daemon-reload
         #sudo -E apt-get -y full-upgrade
         sudo -E apt-get -y autoremove --purge
@@ -142,10 +143,10 @@ jobs:
         sudo mkdir -p /builder
         sudo mount /dev/github/runner /builder
         sudo chown -R runner.runner /builder
-        ln -sf /builder ${GITHUB_WORKSPACE}
   
     - name: Clone source code [ ${{ inputs.source_branch }} ]
       id: codes
+      working-directory: /builder
       run: |
         df -hT $PWD
         if [[ "${{ inputs.source_branch }}" == *"openwrt"* ]]; then
@@ -169,19 +170,19 @@ jobs:
             exit 1
         fi
         git clone -q --single-branch --depth=1 --branch=${REPO_BRANCH} ${REPO_URL} openwrt
+        ln -sf /builder/openwrt ${GITHUB_WORKSPACE}/openwrt
         echo "build_tag=OpenWrt_${TAGS_NAME}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
-        ls -a
 
     - name: Cache
       uses: stupidloud/cachewrtbuild@main
       with:
         ccache: 'true'
-        prefix: ${GITHUB_WORKSPACE}/openwrt
+        prefix: 'openwrt'
     
     - name: Load custom feeds
       run: |
         [[ -f "${FEEDS_CONF}" ]] && cp -f ${FEEDS_CONF} openwrt/feeds.conf.default
-        chmod +x ${DIY_P1_SH}
+        dos2unix ${DIY_P1_SH} && chmod +x ${DIY_P1_SH}
         cd openwrt
         ${GITHUB_WORKSPACE}/${DIY_P1_SH}
 
@@ -195,9 +196,9 @@ jobs:
       run: |
         [[ -e "${FILES}" ]] && mv -f ${FILES} openwrt/files
         [[ -e "${CONFIGS}" ]] && cp -f ${CONFIGS} openwrt/.config
-        chmod +x ${DIY_P2_SH}
+        dos2unix ${DIY_P2_SH} && chmod +x ${DIY_P2_SH}
         cd openwrt
-        ${GITHUB_WORKSPACE}${DIY_P2_SH}
+        ${GITHUB_WORKSPACE}/${DIY_P2_SH}
 
     - name: Download package
       run: |
@@ -255,8 +256,6 @@ jobs:
         tag: ${{ steps.codes.outputs.build_tag }}
         artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
         allowUpdates: true
-        removeArtifacts: false
-        replacesArtifacts: true
         token: ${{ secrets.PAT }}
 
 ###docker-uploader
