@@ -143,13 +143,13 @@ jobs:
       uses: stupidloud/cachewrtbuild@main
       with:
         ccache: 'true'
-        prefix: /builder/openwrt
+        prefix: 'openwrt'
     
     - name: Load custom feeds
       run: |
         ls -a
         [[ -f "${FEEDS_CONF}" ]] && cp -f ${FEEDS_CONF} openwrt/feeds.conf.default
-        dos2unix ${DIY_P2_SH} && chmod +x ${DIY_P1_SH}
+        dos2unix ${DIY_P1_SH} && chmod +x ${DIY_P1_SH}
         cd openwrt
         ${GITHUB_WORKSPACE}/${DIY_P1_SH}
 
