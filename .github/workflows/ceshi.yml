@@ -108,6 +108,7 @@ jobs:
         sudo mount /dev/github/runner /builder
         sudo chown -R runner.runner /builder
         ln -sf /builder ${GITHUB_WORKSPACE}
+        df -hT
   
     - name: Clone source code [ ${{ inputs.source_branch }} ]
       id: codes
