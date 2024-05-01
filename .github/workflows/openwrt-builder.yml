@@ -78,7 +78,7 @@ env:
   MAKE_DOCKER_SH: docker/make_docker_image.sh
   DIY_P1_SH: scripts/diy-part1.sh
   DIY_P2_SH: scripts/diy-part2.sh
-  DOCKER_OUTPATH: docker/out
+  DOCKER_OUTPATH: out
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
 
