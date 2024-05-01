@@ -178,7 +178,7 @@ jobs:
       uses: stupidloud/cachewrtbuild@main
       with:
         ccache: 'true'
-        prefix: 'openwrt'
+        prefix: $PWD/openwrt
     
     - name: Load custom feeds
       run: |
