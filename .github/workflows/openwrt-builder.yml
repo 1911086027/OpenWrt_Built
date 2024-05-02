@@ -26,29 +26,9 @@ on:
         type: choice
         options:
           - all
-          - a311d	
-          - s922x	
-          - s905x3	
-          - s905x2	
-          - s912	
+          #Cortex-A53
           - s905d
-          - s905x
-          - s905w	
-          - s905mb
-          - s905l	
-          - s905l2
-          - s905l3
-          - s905l3a
-          - s905l3b
-          - s905lb
-          - s905
-          - rk3588
-          - rk3568
-          - rk3566
-          - rk3528	
-          - rk3399
-          - rk3328	
-          - rk3318
+          - rk3328
           - h6
       openwrt_kernel:
         description: "Select kernel version"
@@ -66,20 +46,20 @@ on:
       docker_img:
         description: "Set the docker image"
         required: false
-        default: "1911086027/openwrt-aarch64:immortalwrt"
+        default: "1911086027/openwrt_cortex-a53:immortalwrt"
         type: choice
         options:
-          - 1911086027/openwrt-aarch64:openwrt
-          - 1911086027/openwrt-aarch64:lede
-          - 1911086027/openwrt-aarch64:immortalwrt
-          - 1911086027/openwrt-aarch64:Lienol
+          - 1911086027/openwrt_cortex-a53:openwrt
+          - 1911086027/openwrt_cortex-a53:lede
+          - 1911086027/openwrt_cortex-a53:immortalwrt
+          - 1911086027/openwrt_cortex-a53:Lienol
           
 env:
   FEEDS_CONF: configs/${{ inputs.source_branch }}/feeds.conf.default
   CONFIGS: configs/${{ inputs.source_branch }}/.config
-  FILES: configs/${{ inputs.source_branch }}/files
-  DIY_P1_SH: configs/${{ inputs.source_branch }}/diy-part1.sh
-  DIY_P2_SH: configs/${{ inputs.source_branch }}/diy-part2.sh
+  FILES: configs/files
+  DIY_P1_SH: configs/diy-part1.sh
+  DIY_P2_SH: configs/diy-part2.sh
   MAKE_DOCKER_SH: docker/make_docker_image.sh
   DOCKER_OUTPATH: out
   UPLOAD_RELEASE: true
