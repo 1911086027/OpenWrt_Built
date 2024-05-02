@@ -66,18 +66,21 @@ on:
       docker_img:
         description: "Set the docker image"
         required: false
-        default: "1911086027/openwrt-aarch64:latest"
+        default: "1911086027/openwrt-aarch64:immortalwrt"
         type: choice
         options:
-          - 1911086027/openwrt-aarch64:latest
+          - 1911086027/openwrt-aarch64:openwrt
+          - 1911086027/openwrt-aarch64:lede
+          - 1911086027/openwrt-aarch64:immortalwrt
+          - 1911086027/openwrt-aarch64:Lienol
           
 env:
   FEEDS_CONF: configs/${{ inputs.source_branch }}/feeds.conf.default
-  CONFIGS: configs/${{ inputs.source_branch }}/config
+  CONFIGS: configs/${{ inputs.source_branch }}/.config
   FILES: configs/${{ inputs.source_branch }}/files
+  DIY_P1_SH: configs/${{ inputs.source_branch }}/diy-part1.sh
+  DIY_P2_SH: configs/${{ inputs.source_branch }}/diy-part2.sh
   MAKE_DOCKER_SH: docker/make_docker_image.sh
-  DIY_P1_SH: scripts/diy-part1.sh
-  DIY_P2_SH: scripts/diy-part2.sh
   DOCKER_OUTPATH: out
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
@@ -214,13 +217,13 @@ jobs:
         cd openwrt
         echo -e "$(nproc) thread compile"
         make -j$(nproc) V=s || make -j1 V=s
-        df -hT
         echo "status=success" >> ${GITHUB_OUTPUT}
         
     - name: Clear server space
       id: clean
       if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
       run: |
+        df -hT
         cd openwrt
         [[ -d "output" ]] || mkdir output
         cp -f bin/targets/*/*/*rootfs.tar.gz output/
@@ -228,6 +231,7 @@ jobs:
         rm -rf $(ls . | grep -v "^output$" | xargs) 2>/dev/null
         cd output
         for file in *; do [[ ! -d "${file}" ]] && sha256sum "${file}" >"${file}.sha"; done
+        df -hT
         echo "status=success" >> ${GITHUB_OUTPUT}
 
     - name: Upload OpenWrt to Release
