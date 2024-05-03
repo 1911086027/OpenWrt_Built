@@ -23,7 +23,5 @@ sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/M
 sed -i 's/OpenWrt/Pumpkin-Router/g' package/base-files/files/bin/config_generate
 
 # Add packges
-rm -rf package/luci-app-amlogic
-git clone https://github.com/ophub/luci-app-amlogic.git package/luci-app-amlogic
-rm -rf package/luci-app-poweroff
-git clone https://github.com/esirplayground/luci-app-poweroff.git package/luci-app-poweroff
+#rm -rf package/luci-app-amlogic
+#git clone https://github.com/ophub/luci-app-amlogic.git package/luci-app-amlogic

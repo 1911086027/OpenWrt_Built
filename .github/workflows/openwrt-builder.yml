@@ -11,7 +11,7 @@ on:
     inputs:
       source_branch:
         description: "Select source branch"
-        required: false
+        required: true
         default: "immortalwrt"
         type: choice
         options:
@@ -21,7 +21,7 @@ on:
           - Lienol
       openwrt_board:
         description: "Select device board"
-        required: false
+        required: true
         default: "s905d"
         type: choice
         options:
@@ -32,7 +32,7 @@ on:
           - h6
       openwrt_kernel:
         description: "Select kernel version"
-        required: false
+        required: true
         default: "5.10.y_5.15.y"
         type: choice
         options:
@@ -45,7 +45,7 @@ on:
           - 6.1.y_6.6.y
       docker_img:
         description: "Set the docker image"
-        required: false
+        required: true
         default: "1911086027/openwrt_cortex-a53:immortalwrt"
         type: choice
         options:
@@ -170,13 +170,10 @@ jobs:
         ${GITHUB_WORKSPACE}/${DIY_P1_SH}
 
     - name: Update feeds
-      run: |
-        cd openwrt && ./scripts/feeds update -a
-        rm -rf ./feeds/packages/net/mosdns
+      run: cd openwrt && ./scripts/feeds update -a
 
     - name: Install feeds
-      run: |
-        cd openwrt && ./scripts/feeds install -a
+      run: cd openwrt && ./scripts/feeds install -a
 
     - name: Load custom configuration
       run: |
