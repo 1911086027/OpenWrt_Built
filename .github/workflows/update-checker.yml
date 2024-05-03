@@ -26,7 +26,7 @@ on:
           - immortalwrt
           - Lienol
   schedule:
-    - cron: 3 */12 * * *
+    - cron: 20 * * * *
 
 jobs:
   check:
