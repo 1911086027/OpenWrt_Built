@@ -14,4 +14,4 @@ jobs:
 
     steps:
     - name: Run Update Checker
-      run: chmod +x ${JB_SH} && ${JB_SH}
+      run: ls -a && chmod +x ${JB_SH} && ${JB_SH}
