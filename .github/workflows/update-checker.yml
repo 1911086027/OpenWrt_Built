@@ -62,8 +62,11 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
-
+    
     steps:
+    - name: Checkout
+      uses: actions/checkout@main
+      
     - name: Get Commit Hash
       id: getHash
       run: |
