@@ -101,7 +101,7 @@ jobs:
 
   call:
     name: Call OpenWrt Builder
-    if: steps.cacheHash.outputs.cache-hit != 'true'
+    if: check.steps.cacheHash.outputs.cache-hit != 'true'
     uses: ./.github/workflows/openwrt-builder.yml
     with:
       source_branch: ${{ github.event.inputs.source_branch }}
