@@ -72,19 +72,19 @@ jobs:
         if [[ "${{ github.event.inputs.source_branch }}" || "${{ github.event.client_payload.source_branch }}" == *"openwrt"* ]]; then
             REPO_URL="https://github.com/openwrt/openwrt"
             REPO_BRANCH="openwrt-23.05"
-            TAGS_NAME="official"
+            echo "TAGS_NAME=official" >> ${GITHUB_OUTPUT}
         elif [[ "${{ github.event.inputs.source_branch }}" || "${{ github.event.client_payload.source_branch }}" == *"lede"* ]]; then
             REPO_URL="https://github.com/coolsnowwolf/lede"
             REPO_BRANCH="master"
-            TAGS_NAME="lede"
+            echo "TAGS_NAME=lede" >> ${GITHUB_OUTPUT}
         elif [[ "${{ github.event.inputs.source_branch }}" || "${{ github.event.client_payload.source_branch }}" == *"immortalwrt"* ]]; then
             REPO_URL="https://github.com/immortalwrt/immortalwrt"
             REPO_BRANCH="openwrt-23.05"
-            TAGS_NAME="immortalwrt"
+            echo "TAGS_NAME=immortalwrt" >> ${GITHUB_OUTPUT}
         elif [[ "${{ github.event.inputs.source_branch }}" || "${{ github.event.client_payload.source_branch }}" == *"Lienol"* ]]; then
             REPO_URL="https://github.com/Lienol/openwrt"
             REPO_BRANCH="23.05"
-            TAGS_NAME="Lienol"
+            echo "TAGS_NAME=Lienol" >> ${GITHUB_OUTPUT}
         else
             echo "Unknown source code repository."
             exit 1
@@ -96,13 +96,13 @@ jobs:
       id: cacheHash
       uses: actions/cache@v4
       with:
-        path: .commitHash_${{ steps.getHash.TAGS_NAME }}
+        path: .commitHash_${{ steps.getHash.outputs.TAGS_NAME }}
         key: commitHash_${{ steps.getHash.outputs.commitHash }}
 
     - name: Save New Commit Hash
       if: steps.cacheHash.outputs.cache-hit != 'true'
       run: |
-        echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash_${{ steps.getHash.TAGS_NAME }}
+        echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash_${{ steps.getHash.outputs.TAGS_NAME }}
         
     outputs:
       cache-hit: ${{ steps.cacheHash.outputs.cache-hit }}
