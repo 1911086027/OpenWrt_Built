@@ -7,9 +7,9 @@ for i in $(seq 0 3); do
   docker_img="${docker_imgs[$i]}"
   curl -L \
     -X POST \
-    -H "Authorization: Bearer ${{ secrets.PAT }}" \
-    -H "Accept: application/vnd.github.everest-preview+json" \
-    -H "Content-Type: application/json" \
+    -H "Authorization:Bearer ${{ secrets.PAT }}" \
+    -H "Accept:application/vnd.github.everest-preview+json" \
+    -H "Content-Type:application/json" \
     https://api.github.com/repos/${{ github.repository }}/dispatches \
-    -d '{"event_type": "call", "client_payload": {"source_branch": "$source_branch", "openwrt_kernel": "5.10.y_5.15.y", "openwrt_board": "s905d", "docker_img": "$docker_img"}}'
+    -d '{"event_type":"call", "client_payload":{"source_branch":"$source_branch","openwrt_kernel":"5.10.y_5.15.y","openwrt_board":"s905d","docker_img":"$docker_img"}}'
 done
