@@ -85,7 +85,6 @@ jobs:
             exit 1
         fi
         git clone -q --single-branch --depth=1 --branch=${REPO_BRANCH} ${REPO_URL}
-        rm -rf .commitHash
         echo "commitHash=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
     - name: Compare Commit Hash
@@ -101,7 +100,7 @@ jobs:
         echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash
 
     - name: Call OpenWrt Builder
-      if: steps.cacheHash.outputs.cache-hit != 'true'
+#      if: steps.cacheHash.outputs.cache-hit != 'true'
       uses: ./.github/workflows/openwrt-builder.yml@main
       with:
         source_branch: ${{ github.event.inputs.source_branch }}
