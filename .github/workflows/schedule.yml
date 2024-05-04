@@ -5,12 +5,13 @@ on:
   schedule:
     - cron: '30 3 * * *'
 
+env:
+  JB_SH: jb.sh
+
 jobs:
   schedule:
     runs-on: ubuntu-latest
 
     steps:
     - name: Run Update Checker
-      run: |
-        chmod +x jb.sh
-        jb.sh
+      run: chmod +x ${JB_SH} && ${JB_SH}
