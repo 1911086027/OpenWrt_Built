@@ -15,7 +15,11 @@ jobs:
         with:
           github-token: ${{ secrets.PAT }}
           script: |
+            const { Octokit } = require('@octokit/core');
+
             async function run() {
+              const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+              
               const source_branches = ['openwrt', 'lede', 'immortalwrt', 'Lienol'];
               const docker_imgs = ['1911086027/openwrt_cortex-a53:openwrt', '1911086027/openwrt_cortex-a53:lede', '1911086027/openwrt_cortex-a53:immortalwrt', '1911086027/openwrt_cortex-a53:Lienol'];
 
@@ -23,7 +27,7 @@ jobs:
                 const source_branch = source_branches[i];
                 const docker_img = docker_imgs[i];
                 
-                const { data } = await github.actions.createWorkflowDispatch({
+                const { data } = await octokit.rest.actions.createWorkflowDispatch({
                   owner: '1911086027',
                   repo: 'OpenWrt_Built',
                   workflow_id: 'update-checker.yml',
