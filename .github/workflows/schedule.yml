@@ -13,5 +13,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout
+      uses: actions/checkout@main
+      
     - name: Run Update Checker
       run: ls -a ${GITHUB_WORKSPACE} && chmod +x ${GITHUB_WORKSPACE}/${JB_SH} && ${GITHUB_WORKSPACE}/${JB_SH}
