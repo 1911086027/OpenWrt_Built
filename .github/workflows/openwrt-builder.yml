@@ -7,7 +7,20 @@ name: OpenWrt Builder
 
 on:
   workflow_call:
-          
+    inputs:
+      source_branch:
+        required: true
+        type: string
+      openwrt_board: 
+        required: true
+        type: string
+      openwrt_kernel:
+        required: true
+        type: string
+      docker_img:
+        required: true
+        type: string
+
 env:
   FEEDS_CONF: configs/${{ github.event.inputs.source_branch }}/feeds.conf.default
   CONFIGS: configs/${{ github.event.inputs.source_branch }}/.config

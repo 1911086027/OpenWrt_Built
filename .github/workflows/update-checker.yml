@@ -102,12 +102,11 @@ jobs:
       run: |
         echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash
 
-  call-workflow:
-    name: Call OpenWrt Builder
-#   if: steps.cacheHash.outputs.cache-hit != 'true'
-    uses: ./.github/workflows/openwrt-builder.yml@main
-    with:
-      source_branch: ${{ github.event.inputs.source_branch }}
-      openwrt_board: ${{ github.event.inputs.openwrt_board }}
-      openwrt_kernel: ${{ github.event.inputs.openwrt_kernel }}
-      docker_img: ${{ github.event.inputs.docker_img }}
+    - name: Call OpenWrt Builder
+  #   if: steps.cacheHash.outputs.cache-hit != 'true'
+      uses: ./.github/workflows/openwrt-builder.yml
+      with:
+        source_branch: ${{ github.event.inputs.source_branch }}
+        openwrt_board: ${{ github.event.inputs.openwrt_board }}
+        openwrt_kernel: ${{ github.event.inputs.openwrt_kernel }}
+        docker_img: ${{ github.event.inputs.docker_img }}
