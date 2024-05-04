@@ -154,7 +154,7 @@ jobs:
         fi
         git clone -q --single-branch --depth=1 --branch=${REPO_BRANCH} ${REPO_URL} openwrt
         ln -sf /builder/openwrt ${GITHUB_WORKSPACE}/openwrt
-        echo "build_tag=OpenWrt_${TAGS_NAME}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
+        echo "build_tag=OpenWrt_${TAGS_NAME}_$(date +"%Y.%m.%d")" >> ${GITHUB_OUTPUT}
 
     - name: Cache
       uses: stupidloud/cachewrtbuild@main
@@ -211,7 +211,6 @@ jobs:
         rm -rf $(ls . | grep -v "^output$" | xargs) 2>/dev/null
         cd output
         for file in *; do [[ ! -d "${file}" ]] && sha256sum "${file}" >"${file}.sha"; done
-        df -hT
         echo "status=success" >> ${GITHUB_OUTPUT}
 
     - name: Upload OpenWrt to Release
@@ -221,8 +220,7 @@ jobs:
         tag: ${{ steps.codes.outputs.build_tag }}
         artifacts: openwrt/output/*
         allowUpdates: true
-        removeArtifacts: false
-        replacesArtifacts: true
+        removeArtifacts: true
         token: ${{ secrets.PAT }}
 
     - name: Packaging OpenWrt
@@ -240,6 +238,7 @@ jobs:
         tag: ${{ steps.codes.outputs.build_tag }}
         artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
         allowUpdates: true
+        removeArtifacts: true
         token: ${{ secrets.PAT }}
 
 ###docker-uploader
