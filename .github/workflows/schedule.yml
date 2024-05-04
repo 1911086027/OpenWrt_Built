@@ -14,4 +14,4 @@ jobs:
 
     steps:
     - name: Run Update Checker
-      run: ls -a && chmod +x ${JB_SH} && ${JB_SH}
+      run: ls -a ${GITHUB_WORKSPACE} && chmod +x ${GITHUB_WORKSPACE}/${JB_SH} && ${GITHUB_WORKSPACE}/${JB_SH}
