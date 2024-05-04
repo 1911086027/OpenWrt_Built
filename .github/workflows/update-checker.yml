@@ -51,7 +51,7 @@ on:
           - 6.1.y_6.6.y
       docker_img:
         description: "Set the docker image"
-        required: false
+        required: true
         default: "1911086027/openwrt_cortex-a53:immortalwrt"
         type: choice
         options:
@@ -91,18 +91,18 @@ jobs:
       id: cacheHash
       uses: actions/cache@v4
       with:
-        path: .commitHash
+        path: .commitHash_${{ github.event.inputs.source_branch }}
         key: commitHash_${{ steps.getHash.outputs.commitHash }}
 
     - name: Save New Commit Hash
       if: steps.cacheHash.outputs.cache-hit != 'true'
       run: |
-        echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash
-        
-  call-workflow:
-#    if: check.steps.cacheHash.outputs.cache-hit != 'true'
-    uses: ./.github/workflows/openwrt-builder.yml
-    with:
+        echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash_${{ github.event.inputs.source_branch }}
+
+    - name: Call OpenWrt Builder
+  #   if: steps.cacheHash.outputs.cache-hit != 'true'
+      uses: openwrt-builder.yml
+      with:
         source_branch: ${{ github.event.inputs.source_branch }}
         openwrt_board: ${{ github.event.inputs.openwrt_board }}
         openwrt_kernel: ${{ github.event.inputs.openwrt_kernel }}
