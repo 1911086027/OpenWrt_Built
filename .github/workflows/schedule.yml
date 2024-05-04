@@ -17,7 +17,7 @@ jobs:
           github-token: ${{ secrets.PAT }}
           script: |
             const { Octokit } = require("@octokit/rest");
-            const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+            const octokit = new Octokit({auth: ${{ secrets.PAT }}})
     
             async function run() {
               const source_branches = ['openwrt', 'lede', 'immortalwrt', 'Lienol'];
