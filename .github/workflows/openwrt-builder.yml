@@ -6,53 +6,7 @@
 name: OpenWrt Builder
 
 on:
-  repository_dispatch:
-  workflow_dispatch:
-    inputs:
-      source_branch:
-        description: "Select source branch"
-        required: true
-        default: "immortalwrt"
-        type: choice
-        options:
-          - openwrt
-          - lede
-          - immortalwrt
-          - Lienol
-      openwrt_board:
-        description: "Select device board"
-        required: true
-        default: "s905d"
-        type: choice
-        options:
-          - all
-          #Cortex-A53
-          - s905d
-          - rk3328
-          - h6
-      openwrt_kernel:
-        description: "Select kernel version"
-        required: true
-        default: "5.10.y_5.15.y"
-        type: choice
-        options:
-          - 5.4.y
-          - 5.10.y
-          - 5.15.y
-          - 6.1.y
-          - 6.6.y
-          - 5.10.y_5.15.y
-          - 6.1.y_6.6.y
-      docker_img:
-        description: "Set the docker image"
-        required: false
-        default: "1911086027/openwrt_cortex-a53:immortalwrt"
-        type: choice
-        options:
-          - 1911086027/openwrt_cortex-a53:openwrt
-          - 1911086027/openwrt_cortex-a53:lede
-          - 1911086027/openwrt_cortex-a53:immortalwrt
-          - 1911086027/openwrt_cortex-a53:Lienol
+  workflow_call:
           
 env:
   FEEDS_CONF: configs/${{ github.event.inputs.source_branch }}/feeds.conf.default

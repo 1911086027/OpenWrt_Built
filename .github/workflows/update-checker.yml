@@ -25,9 +25,40 @@ on:
           - lede
           - immortalwrt
           - Lienol
-  schedule:
-    - cron: 20 * * * *
-
+      openwrt_board:
+        description: "Select device board"
+        required: true
+        default: "s905d"
+        type: choice
+        options:
+          - all
+          #Cortex-A53
+          - s905d
+          - rk3328
+          - h6
+      openwrt_kernel:
+        description: "Select kernel version"
+        required: true
+        default: "5.10.y_5.15.y"
+        type: choice
+        options:
+          - 5.4.y
+          - 5.10.y
+          - 5.15.y
+          - 6.1.y
+          - 6.6.y
+          - 5.10.y_5.15.y
+          - 6.1.y_6.6.y
+      docker_img:
+        description: "Set the docker image"
+        required: false
+        default: "1911086027/openwrt_cortex-a53:immortalwrt"
+        type: choice
+        options:
+          - 1911086027/openwrt_cortex-a53:openwrt
+          - 1911086027/openwrt_cortex-a53:lede
+          - 1911086027/openwrt_cortex-a53:immortalwrt
+          - 1911086027/openwrt_cortex-a53:Lienol
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -68,9 +99,11 @@ jobs:
       run: |
         echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash
 
-    - name: Trigger build
+    - name: Call OpenWrt Builder
       if: steps.cacheHash.outputs.cache-hit != 'true'
-      uses: peter-evans/repository-dispatch@v3
+      uses: ./.github/workflows/openwrt-builder.yml@main
       with:
-        token: ${{ secrets.PAT }}
-        event-type: Source Code Update
+        source_branch: ${{ github.event.inputs.source_branch }}
+        openwrt_board: ${{ github.event.inputs.openwrt_board }}
+        openwrt_kernel: ${{ github.event.inputs.openwrt_kernel }}
+        docker_img: ${{ github.event.inputs.docker_img }}
