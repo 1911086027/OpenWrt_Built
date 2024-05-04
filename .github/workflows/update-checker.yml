@@ -85,6 +85,7 @@ jobs:
             exit 1
         fi
         git clone -q --single-branch --depth=1 --branch=${REPO_BRANCH} ${REPO_URL}
+        rm -rf .commitHash
         echo "commitHash=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
     - name: Compare Commit Hash
