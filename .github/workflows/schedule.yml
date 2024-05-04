@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - run: sudo npm install @octokit/rest
       - name: Run Update Checker
         uses: actions/github-script@v7
         with:
