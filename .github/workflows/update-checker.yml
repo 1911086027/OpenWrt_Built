@@ -100,10 +100,9 @@ jobs:
         echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash
         
   call-workflow:
-    runs-on: ubuntu-latest
-    if: check.steps.cacheHash.outputs.cache-hit != 'true'
-      uses: ./.github/workflows/openwrt-builder.yml
-      with:
+#    if: check.steps.cacheHash.outputs.cache-hit != 'true'
+    uses: ./.github/workflows/openwrt-builder.yml
+    with:
         source_branch: ${{ github.event.inputs.source_branch }}
         openwrt_board: ${{ github.event.inputs.openwrt_board }}
         openwrt_kernel: ${{ github.event.inputs.openwrt_kernel }}
