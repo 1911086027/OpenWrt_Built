@@ -64,7 +64,6 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      
     - name: Get Commit Hash
       id: getHash
       run: |
@@ -100,11 +99,9 @@ jobs:
       run: |
         echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash
         
-    - name: Checkout
-      uses: actions/checkout@main
-      
-    - name: Call OpenWrt Builder
-  #   if: steps.cacheHash.outputs.cache-hit != 'true'
+  call-workflow:
+    runs-on: ubuntu-latest
+    if: check.steps.cacheHash.outputs.cache-hit != 'true'
       uses: ./.github/workflows/openwrt-builder.yml
       with:
         source_branch: ${{ github.event.inputs.source_branch }}
