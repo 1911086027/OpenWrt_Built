@@ -10,37 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: sudo npm install @octokit/rest
-      - name: Run Update Checker
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.PAT }}
-          script: |
-            const { Octokit } = require("@octokit/rest");
-            const octokit = new Octokit({auth: ${{ secrets.PAT }}})
-    
-            async function run() {
-              const source_branches = ['openwrt', 'lede', 'immortalwrt', 'Lienol'];
-              const docker_imgs = ['1911086027/openwrt_cortex-a53:openwrt', '1911086027/openwrt_cortex-a53:lede', '1911086027/openwrt_cortex-a53:immortalwrt', '1911086027/openwrt_cortex-a53:Lienol'];
-    
-              for (let i = 0; i < 4; i++) {
-                const source_branch = source_branches[i];
-                const docker_img = docker_imgs[i];
-                
-                const { data } = await octokit.actions.createWorkflowDispatch({
-                  owner: '1911086027',
-                  repo: 'OpenWrt_Built',
-                  workflow_id: 'update-checker.yml',
-                  ref: 'main',
-                  inputs: {
-                    source_branch: source_branch,
-                    openwrt_board: 's905d',
-                    openwrt_kernel: '5.10.y_5.15.y',
-                    docker_img: docker_img,
-                  }
-                });
-                
-                console.log(`Workflow dispatch for ${source_branch} with Docker image ${docker_img} completed.`);
-              }
-            }
-            run();
+    - name: Run Update Checker
+      run: |
+        source_branches = ("openwrt" "lede" "immortalwrt" "Lienol")
+        docker_imgs = ("1911086027/openwrt_cortex-a53:openwrt" "1911086027/openwrt_cortex-a53:lede" "1911086027/openwrt_cortex-a53:immortalwrt" "1911086027/openwrt_cortex-a53:Lienol")
+        for i in $(seq 0 3); do
+          source_branch="${source_branches[$i]}"
+          docker_img="${docker_imgs[$i]}"
+          curl -L \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.PAT }}" \
+            -H "Accept: application/vnd.github.everest-preview+json" \
+            -H "Content-Type: application/json" \
+            https://api.github.com/repos/${{ github.repository }}/dispatches \
+            -d '{"event_type": "custom_event", "client_payload": {"source_branch": "$source_branch", "docker_img": "$docker_img"}}'
+        done
