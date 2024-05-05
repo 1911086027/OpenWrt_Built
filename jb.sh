@@ -9,7 +9,7 @@ for i in $(seq 0 3); do
   docker_img="${docker_imgs[$i]}"
   curl -L \
     -X POST \
-    -H "Authorization:Bearer ${{ token }}" \
+    -H "Authorization:Bearer $token" \
     -H "Accept:application/vnd.github.everest-preview+json" \
     -H "Content-Type:application/json" \
     https://api.github.com/repos/${{ github.repository }}/dispatches \
