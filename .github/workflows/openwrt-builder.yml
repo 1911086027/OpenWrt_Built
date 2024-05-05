@@ -22,8 +22,8 @@ on:
         type: string
 
 env:
-  FEEDS_CONF: configs/${{ github.event.inputs.source_branch }}/feeds.conf.default
-  CONFIGS: configs/${{ github.event.inputs.source_branch }}/.config
+  FEEDS_CONF: configs/${{ inputs.source_branch }}/feeds.conf.default
+  CONFIGS: configs/${{ inputs.source_branch }}/.config
   FILES: configs/files
   DIY_P1_SH: configs/diy-part1.sh
   DIY_P2_SH: configs/diy-part2.sh
@@ -94,24 +94,24 @@ jobs:
         sudo mount /dev/github/runner /builder
         sudo chown -R runner.runner /builder
   
-    - name: Clone source code [ ${{ github.event.inputs.source_branch }} ]
+    - name: Clone source code [ ${{ inputs.source_branch }} ]
       id: codes
       working-directory: /builder
       run: |
         df -hT $PWD
-        if [[ "${{ github.event.inputs.source_branch }}" == *"openwrt"* ]]; then
+        if [[ "${{ inputs.source_branch }}" == *"openwrt"* ]]; then
             REPO_URL="https://github.com/openwrt/openwrt"
             REPO_BRANCH="openwrt-23.05"
             TAGS_NAME="official"
-        elif [[ "${{ github.event.inputs.source_branch }}" == *"lede"* ]]; then
+        elif [[ "${{ inputs.source_branch }}" == *"lede"* ]]; then
             REPO_URL="https://github.com/coolsnowwolf/lede"
             REPO_BRANCH="master"
             TAGS_NAME="lede"
-        elif [[ "${{ github.event.inputs.source_branch }}" == *"immortalwrt"* ]]; then
+        elif [[ "${{ inputs.source_branch }}" == *"immortalwrt"* ]]; then
             REPO_URL="https://github.com/immortalwrt/immortalwrt"
             REPO_BRANCH="openwrt-23.05"
             TAGS_NAME="immortalwrt"
-        elif [[ "${{ github.event.inputs.source_branch }}" == *"Lienol"* ]]; then
+        elif [[ "${{ inputs.source_branch }}" == *"Lienol"* ]]; then
             REPO_URL="https://github.com/Lienol/openwrt"
             REPO_BRANCH="23.05"
             TAGS_NAME="Lienol"
@@ -195,8 +195,8 @@ jobs:
       if: ${{ steps.clean.outputs.status }} == 'success' && !cancelled()
       with:
         openwrt_path: openwrt/output/*rootfs.tar.gz
-        openwrt_board: ${{ github.event.inputs.openwrt_board }}
-        openwrt_kernel: ${{ github.event.inputs.openwrt_kernel }}
+        openwrt_board: ${{ inputs.openwrt_board }}
+        openwrt_kernel: ${{ inputs.openwrt_kernel }}
       
     - name: Upload the packaged OpenWrt
       uses: ncipollo/release-action@main
@@ -235,7 +235,7 @@ jobs:
         push: true
         platforms: linux/arm64
         context: ${{ env.DOCKER_OUTPATH }}
-        tags: "${{ github.event.inputs.docker_img }}"
+        tags: "${{ inputs.docker_img }}"
 
     - name: Delete releases and workflows runs
       uses: ophub/delete-releases-workflows@main
