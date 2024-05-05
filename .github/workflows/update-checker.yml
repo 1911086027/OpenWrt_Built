@@ -119,3 +119,5 @@ jobs:
       docker_img: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.docker_img || github.event.inputs.docker_img }}
     secrets:
       TOKEN: ${{ secrets.TOKEN }}
+      USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
