@@ -17,3 +17,4 @@ jobs:
       run:  chmod +x ./jb.sh && ./jb.sh ${token}
       env:
         token: ${{ secrets.TOKEN }}
+        repository: ${{ github.repository }}
