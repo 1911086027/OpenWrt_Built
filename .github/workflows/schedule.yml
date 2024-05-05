@@ -1,7 +1,6 @@
 name: Scheduled Workflow
 
 on:
-  workflow_dispatch:
   schedule:
     - cron: '30 3 * * *'
 
