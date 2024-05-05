@@ -188,7 +188,7 @@ jobs:
         artifacts: openwrt/output/*
         allowUpdates: true
         removeArtifacts: true
-        token: ${{ secrets.PAT }}
+        token: ${{ secrets.TOKEN }}
 
     - name: Packaging OpenWrt
       uses: ophub/amlogic-s9xxx-openwrt@main
@@ -205,7 +205,7 @@ jobs:
         tag: ${{ steps.codes.outputs.build_tag }}
         artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
         allowUpdates: true
-        token: ${{ secrets.PAT }}
+        token: ${{ secrets.TOKEN }}
 
 ###docker-uploader
     - name: Build the Docker image
@@ -245,4 +245,4 @@ jobs:
         delete_workflows: true
         workflows_keep_day: 1
         out_log: true
-        gh_token: ${{ secrets.PAT }}
+        gh_token: ${{ secrets.TOKEN }}
