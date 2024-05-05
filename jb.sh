@@ -1,5 +1,7 @@
 #!/bin/bash
 
+token=$1
+
 source_branches=("openwrt" "lede" "immortalwrt" "Lienol")
 docker_imgs=("1911086027/openwrt_cortex-a53:openwrt" "1911086027/openwrt_cortex-a53:lede" "1911086027/openwrt_cortex-a53:immortalwrt" "1911086027/openwrt_cortex-a53:Lienol")
 for i in $(seq 0 3); do
