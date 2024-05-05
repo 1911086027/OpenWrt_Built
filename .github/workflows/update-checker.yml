@@ -69,19 +69,19 @@ jobs:
     - name: Get Commit Hash
       id: getHash
       run: |
-        if [[ "${{ github.event.inputs.source_branch }}" || "${{ github.event.client_payload.source_branch }}" == *"openwrt"* ]]; then
+        if [[ "${{ github.event.inputs.source_branch }}" == *"openwrt"* || "${{ github.event.client_payload.source_branch }}" == *"openwrt"* ]]; then
             REPO_URL="https://github.com/openwrt/openwrt"
             REPO_BRANCH="openwrt-23.05"
             echo "TAGS_NAME=official" >> ${GITHUB_OUTPUT}
-        elif [[ "${{ github.event.inputs.source_branch }}" || "${{ github.event.client_payload.source_branch }}" == *"lede"* ]]; then
+        elif [[ "${{ github.event.inputs.source_branch }}" == *"lede"* || "${{ github.event.client_payload.source_branch }}" == *"lede"* ]]; then
             REPO_URL="https://github.com/coolsnowwolf/lede"
             REPO_BRANCH="master"
             echo "TAGS_NAME=lede" >> ${GITHUB_OUTPUT}
-        elif [[ "${{ github.event.inputs.source_branch }}" || "${{ github.event.client_payload.source_branch }}" == *"immortalwrt"* ]]; then
+        elif [[ "${{ github.event.inputs.source_branch }}" == *"immortalwrt"* || "${{ github.event.client_payload.source_branch }}" == *"immortalwrt"* ]]; then
             REPO_URL="https://github.com/immortalwrt/immortalwrt"
             REPO_BRANCH="openwrt-23.05"
             echo "TAGS_NAME=immortalwrt" >> ${GITHUB_OUTPUT}
-        elif [[ "${{ github.event.inputs.source_branch }}" || "${{ github.event.client_payload.source_branch }}" == *"Lienol"* ]]; then
+        elif [[ "${{ github.event.inputs.source_branch }}" == *"Lienol"* || "${{ github.event.client_payload.source_branch }}" == *"Lienol"* ]]; then
             REPO_URL="https://github.com/Lienol/openwrt"
             REPO_BRANCH="23.05"
             echo "TAGS_NAME=Lienol" >> ${GITHUB_OUTPUT}
