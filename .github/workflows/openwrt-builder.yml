@@ -20,6 +20,9 @@ on:
       docker_img:
         required: true
         type: string
+    secrets:
+      TOKEN:
+        required: true
 
 env:
   FEEDS_CONF: configs/${{ inputs.source_branch }}/feeds.conf.default
