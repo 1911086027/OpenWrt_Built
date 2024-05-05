@@ -114,7 +114,7 @@ jobs:
     if:  ${{ needs.check.outputs['check.cache-hit'] != 'true' }}
     uses: ./.github/workflows/openwrt-builder.yml
     with:
-      source_branch: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.source_branch != null ? github.event.client_payload.source_branch : github.event.inputs.source_branch }}
-      openwrt_board: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.openwrt_board != null ? github.event.client_payload.openwrt_board : github.event.inputs.openwrt_board }}
-      openwrt_kernel: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.openwrt_kernel != null ? github.event.client_payload.openwrt_kernel : github.event.inputs.openwrt_kernel }}
-      docker_img: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.docker_img != null ? github.event.client_payload.docker_img : github.event.inputs.docker_img }}
+      source_branch: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.source_branch || github.event.inputs.source_branch }}
+      openwrt_board: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.openwrt_board || github.event.inputs.openwrt_board }}
+      openwrt_kernel: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.openwrt_kernel || github.event.inputs.openwrt_kernel }}
+      docker_img: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.docker_img || github.event.inputs.docker_img }}
