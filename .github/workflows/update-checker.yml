@@ -23,7 +23,7 @@ on:
         default: "personal"
         type: choice
         options:
-          - offical
+          - official
           - lede
           - immortalwrt
           - Lienol
@@ -58,7 +58,7 @@ on:
         default: "1911086027/openwrt_cortex-a53:personal"
         type: choice
         options:
-          - 1911086027/openwrt_cortex-a53:offical
+          - 1911086027/openwrt_cortex-a53:official
           - 1911086027/openwrt_cortex-a53:lede
           - 1911086027/openwrt_cortex-a53:immortalwrt
           - 1911086027/openwrt_cortex-a53:Lienol
@@ -71,7 +71,7 @@ jobs:
     - name: Get Commit Hash
       id: getHash
       run: |
-        if [[ "${{ github.event.inputs.source_branch }}" == *"offical"* || "${{ github.event.client_payload.source_branch }}" == *"offical"* ]]; then
+        if [[ "${{ github.event.inputs.source_branch }}" == *"official"* || "${{ github.event.client_payload.source_branch }}" == *"official"* ]]; then
             REPO_URL="https://github.com/openwrt/openwrt"
             REPO_BRANCH="main"
             echo "TAGS_NAME=official" >> ${GITHUB_OUTPUT}
