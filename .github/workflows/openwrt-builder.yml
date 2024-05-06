@@ -184,7 +184,6 @@ jobs:
         df -hT
         cd openwrt
         [[ -d "output" ]] || mkdir output
-###        cp -f bin/targets/*/*/*rootfs.tar.gz bin/targets/*/*/*{ext4,squashfs}* output/
         cp -f bin/targets/*/*/* output/
         cp -f .config output/config
         rm -rf $(ls . | grep -v "^output$" | xargs) 2>/dev/null
@@ -258,3 +257,7 @@ jobs:
         workflows_keep_day: 1
         out_log: true
         gh_token: ${{ secrets.TOKEN }}
+
+
+
+###        cp -f bin/targets/*/*/*rootfs.tar.gz bin/targets/*/*/*{ext4,squashfs}* output/
