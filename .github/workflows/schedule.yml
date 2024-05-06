@@ -18,9 +18,9 @@ jobs:
         token: ${{ secrets.TOKEN }}
         repository: ${{ github.repository }}
       run: |
-        source_branches=("openwrt" "lede" "immortalwrt" "Lienol")
+        source_branches=("offical" "lede" "immortalwrt" "Lienol")
         docker_imgs=("1911086027/openwrt_cortex-a53:openwrt" "1911086027/openwrt_cortex-a53:lede" "1911086027/openwrt_cortex-a53:immortalwrt" "1911086027/openwrt_cortex-a53:Lienol")
-        interval=5400
+        interval=3600
 
         for i in $(seq 0 3); do
           source_branch="${source_branches[$i]}"
@@ -31,6 +31,6 @@ jobs:
           -H "Accept:application/vnd.github.everest-preview+json" \
           -H "Content-Type:application/json" \
           https://api.github.com/repos/$repository/dispatches \
-          -d "{\"event_type\":\"schedule\", \"client_payload\":{\"source_branch\":\"$source_branch\",\"openwrt_kernel\":\"5.10.y_5.15.y\",\"openwrt_board\":\"s905d\",\"docker_img\":\"$docker_img\"}}"
+          -d "{\"event_type\":\"schedule\", \"client_payload\":{\"source_branch\":\"$source_branch\",\"openwrt_kernel\":\"5.10.y_5.15.y_6.1.y\",\"openwrt_board\":\"s905d\",\"docker_img\":\"$docker_img\"}}"
           sleep $interval
           done

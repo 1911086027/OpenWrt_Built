@@ -30,7 +30,7 @@ openwrt_path="${current_path}/openwrt/output"
 openwrt_rootfs_file="*rootfs.tar.gz"
 docker_rootfs_file="openwrt-docker-armvirt-64-default-rootfs.tar.gz"
 docker_path="${current_path}/docker"
-common_files="${docker_path}/common-files"
+common_files="${docker_path}/files"
 tmp_path="${current_path}/tmp"
 out_path="${current_path}/out"
 

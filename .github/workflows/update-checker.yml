@@ -20,13 +20,14 @@ on:
       source_branch:
         description: "Select source branch"
         required: true
-        default: "immortalwrt"
+        default: "personal"
         type: choice
         options:
-          - openwrt
+          - offical
           - lede
           - immortalwrt
           - Lienol
+          - personal
       openwrt_board:
         description: "Select device board"
         required: true
@@ -41,7 +42,7 @@ on:
       openwrt_kernel:
         description: "Select kernel version"
         required: true
-        default: "5.10.y_5.15.y"
+        default: "5.15.y"
         type: choice
         options:
           - 5.4.y
@@ -54,13 +55,14 @@ on:
       docker_img:
         description: "Set the docker image"
         required: true
-        default: "1911086027/openwrt_cortex-a53:immortalwrt"
+        default: "1911086027/openwrt_cortex-a53:personal"
         type: choice
         options:
-          - 1911086027/openwrt_cortex-a53:openwrt
+          - 1911086027/openwrt_cortex-a53:offical
           - 1911086027/openwrt_cortex-a53:lede
           - 1911086027/openwrt_cortex-a53:immortalwrt
           - 1911086027/openwrt_cortex-a53:Lienol
+          - 1911086027/openwrt_cortex-a53:personal
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -69,9 +71,9 @@ jobs:
     - name: Get Commit Hash
       id: getHash
       run: |
-        if [[ "${{ github.event.inputs.source_branch }}" == *"openwrt"* || "${{ github.event.client_payload.source_branch }}" == *"openwrt"* ]]; then
+        if [[ "${{ github.event.inputs.source_branch }}" == *"offical"* || "${{ github.event.client_payload.source_branch }}" == *"offical"* ]]; then
             REPO_URL="https://github.com/openwrt/openwrt"
-            REPO_BRANCH="openwrt-23.05"
+            REPO_BRANCH="main"
             echo "TAGS_NAME=official" >> ${GITHUB_OUTPUT}
         elif [[ "${{ github.event.inputs.source_branch }}" == *"lede"* || "${{ github.event.client_payload.source_branch }}" == *"lede"* ]]; then
             REPO_URL="https://github.com/coolsnowwolf/lede"
@@ -79,12 +81,16 @@ jobs:
             echo "TAGS_NAME=lede" >> ${GITHUB_OUTPUT}
         elif [[ "${{ github.event.inputs.source_branch }}" == *"immortalwrt"* || "${{ github.event.client_payload.source_branch }}" == *"immortalwrt"* ]]; then
             REPO_URL="https://github.com/immortalwrt/immortalwrt"
-            REPO_BRANCH="openwrt-23.05"
+            REPO_BRANCH="master"
             echo "TAGS_NAME=immortalwrt" >> ${GITHUB_OUTPUT}
         elif [[ "${{ github.event.inputs.source_branch }}" == *"Lienol"* || "${{ github.event.client_payload.source_branch }}" == *"Lienol"* ]]; then
             REPO_URL="https://github.com/Lienol/openwrt"
-            REPO_BRANCH="23.05"
+            REPO_BRANCH="main"
             echo "TAGS_NAME=Lienol" >> ${GITHUB_OUTPUT}
+        elif [[ "${{ github.event.inputs.source_branch }}" == *"personal"* || "${{ github.event.client_payload.source_branch }}" == *"personal"* ]]; then
+            REPO_URL="https://github.com/immortalwrt/immortalwrt"
+            REPO_BRANCH="openwrt-23.05"
+            echo "TAGS_NAME=personal" >> ${GITHUB_OUTPUT}
         else
             echo "Unknown source code repository."
             exit 1

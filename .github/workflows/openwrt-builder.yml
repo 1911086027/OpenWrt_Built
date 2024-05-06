@@ -106,9 +106,9 @@ jobs:
       working-directory: /builder
       run: |
         df -hT $PWD
-        if [[ "${{ inputs.source_branch }}" == *"openwrt"* ]]; then
+        if [[ "${{ inputs.source_branch }}" == *"official"* ]]; then
             REPO_URL="https://github.com/openwrt/openwrt"
-            REPO_BRANCH="openwrt-23.05"
+            REPO_BRANCH="main"
             TAGS_NAME="official"
         elif [[ "${{ inputs.source_branch }}" == *"lede"* ]]; then
             REPO_URL="https://github.com/coolsnowwolf/lede"
@@ -116,12 +116,16 @@ jobs:
             TAGS_NAME="lede"
         elif [[ "${{ inputs.source_branch }}" == *"immortalwrt"* ]]; then
             REPO_URL="https://github.com/immortalwrt/immortalwrt"
-            REPO_BRANCH="openwrt-23.05"
+            REPO_BRANCH="master"
             TAGS_NAME="immortalwrt"
         elif [[ "${{ inputs.source_branch }}" == *"Lienol"* ]]; then
             REPO_URL="https://github.com/Lienol/openwrt"
-            REPO_BRANCH="23.05"
+            REPO_BRANCH="main"
             TAGS_NAME="Lienol"
+        elif [[ "${{ inputs.source_branch }}" == *"personal"* ]]; then
+            REPO_URL="https://github.com/immortalwrt/immortalwrt"
+            REPO_BRANCH="openwrt-23.05"
+            TAGS_NAME="personal"
         else
             echo "Unknown source code repository."
             exit 1
@@ -180,7 +184,8 @@ jobs:
         df -hT
         cd openwrt
         [[ -d "output" ]] || mkdir output
-        cp -f bin/targets/*/*/*rootfs.tar.gz output/
+###        cp -f bin/targets/*/*/*rootfs.tar.gz bin/targets/*/*/*{ext4,squashfs}* output/
+        cp -f bin/targets/*/*/* output/
         cp -f .config output/config
         rm -rf $(ls . | grep -v "^output$" | xargs) 2>/dev/null
         cd output
