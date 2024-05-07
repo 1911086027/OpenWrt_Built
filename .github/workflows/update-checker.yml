@@ -116,7 +116,7 @@ jobs:
   call:
     needs: check
     name: Call OpenWrt Builder
-    if: needs.check.outputs['check.cache-hit'] != 'true' && echo "hit=needs.check.outputs['check.cache-hit']"
+    if: needs.check.outputs['check.cache-hit'] == 'true'
     uses: ./.github/workflows/openwrt-builder.yml
     with:
       source_branch: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.source_branch || github.event.inputs.source_branch }}
