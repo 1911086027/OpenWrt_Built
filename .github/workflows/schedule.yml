@@ -20,7 +20,6 @@ jobs:
       run: |
         source_branches=("official" "lede" "immortalwrt" "Lienol")
         docker_imgs=("1911086027/openwrt_cortex-a53:official" "1911086027/openwrt_cortex-a53:lede" "1911086027/openwrt_cortex-a53:immortalwrt" "1911086027/openwrt_cortex-a53:Lienol")
-        interval=3600
 
         for i in $(seq 0 3); do
           source_branch="${source_branches[$i]}"
@@ -32,5 +31,6 @@ jobs:
           -H "Content-Type:application/json" \
           https://api.github.com/repos/$repository/dispatches \
           -d "{\"event_type\":\"schedule\", \"client_payload\":{\"source_branch\":\"$source_branch\",\"openwrt_kernel\":\"5.10.y_5.15.y_6.1.y\",\"openwrt_board\":\"s905d\",\"docker_img\":\"$docker_img\"}}"
-          sleep $interval
           done
+          
+#        interval=3600     sleep $interval
