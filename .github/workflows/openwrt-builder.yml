@@ -132,7 +132,8 @@ jobs:
         fi
         git clone -q --single-branch --depth=1 --branch=${REPO_BRANCH} ${REPO_URL} openwrt
         ln -sf /builder/openwrt ${GITHUB_WORKSPACE}/openwrt
-        echo "build_tag=OpenWrt_${TAGS_NAME}_$(date +"%Y.%m.%d")" >> ${GITHUB_OUTPUT}
+        echo "build_tag=OpenWrt_${TAGS_NAME}" >> ${GITHUB_OUTPUT}
+        echo "commitHash=$(git rev-parse HEAD)" >> ${GITHUB_OUTPUT}
 
     - name: Cache
       uses: stupidloud/cachewrtbuild@main
@@ -193,7 +194,7 @@ jobs:
       uses: ncipollo/release-action@main
       if: ${{ steps.clean.outputs.status }} == 'success' && !cancelled()
       with:
-        tag: ${{ steps.codes.outputs.build_tag }}
+        tag: ${{ steps.codes.outputs.build_tag }}_$(date +"%Y.%m.%d")
         artifacts: openwrt/output/*
         allowUpdates: true
         removeArtifacts: true
@@ -211,7 +212,7 @@ jobs:
       uses: ncipollo/release-action@main
       if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
       with:
-        tag: ${{ steps.codes.outputs.build_tag }}
+        tag: ${{ steps.codes.outputs.build_tag }}_$(date +"%Y.%m.%d")
         artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
         allowUpdates: true
         token: ${{ secrets.TOKEN }}
@@ -245,6 +246,10 @@ jobs:
         platforms: linux/arm64
         context: ${{ env.DOCKER_OUTPATH }}
         tags: "${{ inputs.docker_img }}"
+
+    - name: Save New Commit Hash
+      run: |
+        echo ${{ steps.codes.outputs.commitHash }} | tee .commitHash_${{ steps.codes.outputs.build_tag }}
 
     - name: Delete releases and workflows runs
       uses: ophub/delete-releases-workflows@main
