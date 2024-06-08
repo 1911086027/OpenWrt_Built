@@ -191,14 +191,12 @@ jobs:
         echo "status=success" >> ${GITHUB_OUTPUT}
 
     - name: Upload OpenWrt to Release
-      uses: ncipollo/release-action@main
+      uses: actions/upload-artifact@v4
       if: ${{ steps.clean.outputs.status }} == 'success' && !cancelled()
       with:
-        tag: ${ steps.codes.outputs.build_tag }_$(date +"%Y.%m.%d")
-        artifacts: openwrt/output/*
-        allowUpdates: true
-        removeArtifacts: true
-        token: ${{ secrets.TOKEN }}
+        name: ${ steps.codes.outputs.build_tag }_$(date +"%Y.%m.%d")
+        path: openwrt/output/*
+        overwrite: true
 
     - name: Packaging OpenWrt
       uses: ophub/amlogic-s9xxx-openwrt@main
@@ -209,13 +207,12 @@ jobs:
         openwrt_kernel: ${{ inputs.openwrt_kernel }}
       
     - name: Upload the packaged OpenWrt
-      uses: ncipollo/release-action@main
+      uses: actions/upload-artifact@v4
       if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
       with:
-        tag: ${ steps.codes.outputs.build_tag }_$(date +"%Y.%m.%d")
-        artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
-        allowUpdates: true
-        token: ${{ secrets.TOKEN }}
+        name: ${ steps.codes.outputs.build_tag }_$(date +"%Y.%m.%d")
+        path: ${{ env.PACKAGED_OUTPUTPATH }}/*
+        overwrite: true
 
 ###docker-uploader
     - name: Build the Docker image
